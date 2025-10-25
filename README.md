@@ -167,6 +167,12 @@ Following this branching process and merging into `main` will directly support t
 
 ## Next Steps
 
-We are currently on `task-1-problem-definition`.  
-After committing this README, we will open a pull request to merge it into `main`.  
-Then we will proceed to `task-2-design` to formalize the data model and route contract in code comments before writing any database logic.
+We have completed `task-1-problem-definition` and merged it into `main`.
+
+We are now on `task-2-design`. In this phase, we are documenting the data model and route structure directly in code comments (starting in `server/models.py`) so that intent is clear before implementing any SQLAlchemy models or migrations.
+
+After Task 2 is merged, we will proceed to Task 3, where we will:
+- Implement the actual SQLAlchemy models and relationships
+- Add table constraints and model-level validations
+- Initialize Flask-Migrate and generate the first database migration
+- Seed the database and verify relationships/validations in `flask shell`
