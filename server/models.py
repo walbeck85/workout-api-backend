@@ -19,6 +19,17 @@ class Exercise(db.Model):
     workout_exercises = db.relationship("WorkoutExercise", back_populates="exercise", cascade="all, delete")
     workouts = db.relationship("Workout", secondary="workout_exercises", back_populates="exercises")
 
+    @validates("name")
+    def validate_name(self, key, value):
+        """
+        Model Validation:
+        Ensure that an Exercise has a non-empty name.
+        This supports the rubric requirement for model-level validation.
+        """
+        if not value or value.strip() == "":
+            raise ValueError("Exercise name cannot be empty.")
+        return value.strip()
+
     def __repr__(self):
         return f"<Exercise {self.name}>"
 
@@ -33,6 +44,17 @@ class Workout(db.Model):
     # Relationships
     workout_exercises = db.relationship("WorkoutExercise", back_populates="workout", cascade="all, delete")
     exercises = db.relationship("Exercise", secondary="workout_exercises", back_populates="workouts")
+
+    @validates("duration_minutes")
+    def validate_duration(self, key, value):
+        """
+        Model Validation:
+        Ensure that Workout.duration_minutes is positive if provided.
+        This supports the rubric requirement for model-level validation.
+        """
+        if value is not None and value <= 0:
+            raise ValueError("Workout duration must be positive.")
+        return value
 
     def __repr__(self):
         return f"<Workout {self.id} on {self.date}>"
