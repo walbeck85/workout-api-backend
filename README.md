@@ -176,3 +176,162 @@ After Task 2 is merged, we will proceed to Task 3, where we will:
 - Add table constraints and model-level validations
 - Initialize Flask-Migrate and generate the first database migration
 - Seed the database and verify relationships/validations in `flask shell`
+# Lab Submission: Flask SQLAlchemy Workout Application Backend
+
+This repository contains my implementation for the Course 9 Summative Lab. The goal is to design and build a complete backend API for a workout tracking application using Flask, SQLAlchemy, and Marshmallow. The work here demonstrates relational database design, model and schema validation, data serialization, and RESTful API development following Flatiron’s rubric.
+
+## Features
+
+- Implements three relational models:
+  - `Workout`
+  - `Exercise`
+  - `WorkoutExercise` (join table linking workouts and exercises)
+- Provides full CRUD functionality:
+  - Create, view, and delete workouts
+  - Create, view, and delete exercises
+  - Add an exercise to a workout with reps, sets, and duration
+- Enforces multiple layers of validation:
+  - Table constraints (e.g. NOT NULL, CHECK)
+  - Model validations using `@validates`
+  - Schema validations using Marshmallow
+- Includes working seed data and migration scripts
+- Clean branching and PR workflow using feature branches
+- README includes setup, run, and endpoint documentation
+
+## Environment
+
+- Python 3.8.x (tested locally with 3.8.13)
+- Flask 2.2.2
+- Flask-Migrate 3.1.0
+- Flask-SQLAlchemy 3.0.3
+- Marshmallow 3.20.1
+- macOS terminal with Pipenv for environment management
+
+## Setup
+
+Clone and enter the project directory:
+
+```bash
+git clone <https://github.com/walbeck85/workout-api-backend>
+cd workout-api-backend
+```
+
+Install dependencies and activate the Pipenv shell:
+
+```bash
+pipenv install
+pipenv shell
+```
+
+Set environment variables (once per session):
+
+```bash
+export FLASK_APP=server/app.py
+export FLASK_RUN_PORT=5555
+```
+
+Run database migrations:
+
+```bash
+flask db upgrade
+```
+
+Seed the database with sample data:
+
+```bash
+python seed.py
+```
+
+Start the Flask development server:
+
+```bash
+pipenv run flask run
+```
+
+The API will be available at http://127.0.0.1:5555.
+
+## Project Structure
+
+```
+.
+├── Pipfile
+├── Pipfile.lock
+├── README.md
+├── seed.py
+├── server/
+│   ├── __init__.py
+│   ├── app.py
+│   ├── models.py
+│   └── schemas.py
+└── migrations/
+```
+
+## How to Test the API
+
+Once the server is running, you can use `curl` or Postman to test endpoints.
+
+### Workouts
+```bash
+curl http://127.0.0.1:5555/workouts
+curl http://127.0.0.1:5555/workouts/1
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"date": "2025-10-25", "duration_minutes": 40, "notes": "Evening workout"}' \
+  http://127.0.0.1:5555/workouts
+curl -X DELETE http://127.0.0.1:5555/workouts/1
+```
+
+### Exercises
+```bash
+curl http://127.0.0.1:5555/exercises
+curl http://127.0.0.1:5555/exercises/1
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"name": "Lunges", "category": "Strength", "equipment_needed": false}' \
+  http://127.0.0.1:5555/exercises
+curl -X DELETE http://127.0.0.1:5555/exercises/1
+```
+
+### Add Exercise to Workout
+```bash
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"reps": 12, "sets": 3, "duration_seconds": 60}' \
+  http://127.0.0.1:5555/workouts/1/exercises/2/workout_exercises
+```
+
+### Health Check
+```bash
+curl http://127.0.0.1:5555/
+```
+
+## Rubric Alignment
+
+- **Models**: Defined according to the provided entity relationships.
+- **Relationships**: Fully mapped through SQLAlchemy ORM relationships.
+- **Table Constraints**: Includes multiple `CheckConstraint` and `nullable=False` rules.
+- **Model Validations**: Validates exercise names and positive durations using `@validates`.
+- **Schema Validations**: Marshmallow enforces non-empty strings and positive numeric fields.
+- **Serialization**: Uses Marshmallow schemas to serialize and deserialize nested relationships.
+- **Endpoints**: All routes implemented and tested with proper status codes and error handling.
+- **Seed File**: Creates starter data for all models without error.
+- **Code Structure**: Modular structure with clear separation of concerns.
+- **Git Workflow**: Organized feature branches merged through PRs.
+- **README**: Includes setup instructions, endpoint documentation, and rubric coverage.
+
+## Instructor Checklist
+
+1. Clone the repository and install dependencies using Pipenv.
+2. Activate the environment and run migrations:
+   ```bash
+   pipenv shell
+   flask db upgrade
+   ```
+3. Seed the database with:
+   ```bash
+   python seed.py
+   ```
+4. Start the server:
+   ```bash
+   pipenv run flask run
+   ```
+5. Use the endpoint examples above to test functionality.
+6. Confirm valid and invalid data handling in POST routes.
+7. Review the models, schemas, and app routes for code clarity and rubric coverage.
