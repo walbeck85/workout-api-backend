@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.env
+pipenv.env
+.mypy_cache/
+.pytest_cache/
+instance/
+.cache/
+.db
+app.db
